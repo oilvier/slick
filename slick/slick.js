@@ -6,7 +6,7 @@
 |___/_|_|\___|_|\_(_)/ |___/
                    |__/
 
- Version: 2.0.1
+ Version: 2.0.2
   Author: Ken Wheeler / Clever Age
  Website: http://kenwheeler.github.io
     Docs: http://kenwheeler.github.io/slick
@@ -213,12 +213,7 @@
     Slick.prototype.activateADA = function() {
         var _ = this;
 
-        _.$slideTrack.find('.slick-active').attr({
-            'aria-hidden': 'false',
-             'tabindex': '0'
-        }).find('a, input, button, select').attr({
-            'tabindex': '0'
-        });
+        _.$slideTrack.find('.slick-active').removeAttr('aria-hidden tabindex').find('a, input, button, select').removeAttr('tabindex');
 
     };
 
@@ -520,6 +515,7 @@
         if (_.options.accessibility) {
 
             _.$liveRegion = $('<div />', {
+                'role': 'status',
                 'aria-live': 'polite',
                 'aria-atomic': 'true',
                 'class': 'live-region slick-visually-hidden',
@@ -1463,16 +1459,11 @@
                 }
             }).eq(_.currentSlide).find('button').attr({
                 'aria-expanded': 'true',
-                'tabindex': '0'
-            }).end();
+            }).removeAttr('tabindex').end();
         }
 
         for (var i=_.currentSlide, max=i+_.options.slidesToShow; i < max; i++) {
-          if (_.options.focusOnChange) {
-            _.$slides.eq(i).attr({'tabindex': '0'});
-          } else {
-            _.$slides.eq(i).removeAttr('tabindex');
-          }
+          _.$slides.eq(i).removeAttr('tabindex');
         }
 
         _.activateADA();
@@ -1865,7 +1856,7 @@
 
                 if (_.options.focusOnChange || forceFocus) {
                     var $currentSlide = $(_.$slides.get(_.currentSlide));
-                    $currentSlide.attr('tabindex', 0).trigger('focus');
+                    $currentSlide.attr('tabindex', '-1').trigger('focus');
                 }
                 if (announce) {
                     var announceItem = _.options.labelAnnouncement.replace("{currentItem}", ++index).replace("{totalItems}", _.slideCount);
