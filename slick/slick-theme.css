@@ -5,7 +5,6 @@
   width: 1px;
   overflow: hidden;
   word-wrap: normal;
-  clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
 }
 
@@ -71,18 +70,22 @@
 .slick-arrow:hover.slick-disabled:before, .slick-arrow:focus.slick-disabled:before {
   opacity: 0.25;
 }
-.slick-arrow:hover:before, .slick-arrow:focus:before {
-  font-family: "slick";
-  font-size: 20px;
-  line-height: 1;
-  color: white;
-  opacity: 1;
-}
 .slick-initialized:not(.slick-accessible) .slick-arrow:hover, .slick-initialized:not(.slick-accessible) .slick-arrow:focus {
   outline: none;
 }
 .slick-arrow .ico {
   fill: #fff;
+}
+.slick-initialized:not(.slick-accessible) .slick-arrow {
+  font-size: 0;
+  line-height: 0;
+}
+.slick-initialized:not(.slick-accessible) .slick-arrow::before {
+  font-family: "slick";
+  font-size: 20px;
+  line-height: 1;
+  color: white;
+  opacity: 1;
 }
 
 .slick-prev {
@@ -92,6 +95,12 @@
   left: auto;
   right: -25px;
 }
+.slick-initialized:not(.slick-accessible) .slick-prev:before {
+  content: "←";
+}
+[dir=rtl] .slick-initialized:not(.slick-accessible) .slick-prev:before {
+  content: "→";
+}
 
 .slick-next {
   right: -25px;
@@ -99,6 +108,12 @@
 [dir=rtl] .slick-next {
   left: -25px;
   right: auto;
+}
+.slick-initialized:not(.slick-accessible) .slick-next:before {
+  content: "→";
+}
+[dir=rtl] .slick-initialized:not(.slick-accessible) .slick-next:before {
+  content: "←";
 }
 
 /* Pause/Play Button*/
@@ -144,6 +159,14 @@
 }
 .slick-pause.slick--playing:after {
   right: 4px;
+}
+.slick-pause .slick-pause-label {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  word-wrap: normal;
+  clip: rect(1px, 1px, 1px, 1px);
 }
 
 /* Dots */
@@ -266,7 +289,6 @@
   width: 1px;
   overflow: hidden;
   word-wrap: normal;
-  clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
 }
 .slick-accessible .slick-active button {

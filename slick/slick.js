@@ -55,16 +55,20 @@
                 appendDots: $(element),
                 arrows: true,
                 asNavFor: null,
-                labelPrev: 'Previous',
-                labelNext: 'Next',
+                labelPrev: 'Previous item',
+                labelNext: 'Next item',
                 labelPrevInfinite: 'Previous (go to the last item)',
                 labelNextInfinite: 'Next (go to the first item)',
                 labelPrevFirst: 'First item',
                 labelNextFirst: 'Last item',
                 labelAnnouncement: 'Slide {currentItem} of {totalItems}',
                 labelPaginatioSeparator: 'of',
-                prevArrow: '<button class="slick-prev" type="button">Previous Slide</button>',
-                nextArrow: '<button class="slick-next" type="button">Next Slide</button>',
+                prevArrow() {
+                    return '<button class="slick-prev" type="button">' + this.labelPrev + '</button>';
+                },
+                nextArrow() {
+                    return '<button class="slick-next" type="button">' + this.labelNext + '</button>';
+                },
                 autoplay: false,
                 autoplaySpeed: 3000,
                 centerMode: false,
@@ -90,7 +94,9 @@
                 pauseOnDotsHover: true,
                 pauseLabel: 'Stop animation',
                 playLabel: 'Start animation',
-                pauseButton: '<button class="slick-pause" type="button"><span class="slick-pause-label">Stop animation</span></button>',
+                pauseButton() {
+                    return '<button class="slick-pause" type="button"><span class="slick-pause-label">' + this.pauseLabel + '</span></button>';
+                },
                 respondTo: 'window',
                 responsive: null,
                 rows: 1,
@@ -457,19 +463,19 @@
 
         if (_.options.arrows === true ) {
 
-            _.$prevArrow = $(_.options.prevArrow).addClass('slick-arrow slick-control');
-            _.$nextArrow = $(_.options.nextArrow).addClass('slick-arrow slick-control');
+            _.$prevArrow = $(_.options.prevArrow()).addClass('slick-arrow slick-control');
+            _.$nextArrow = $(_.options.nextArrow()).addClass('slick-arrow slick-control');
 
             if( _.slideCount > _.options.slidesToShow ) {
 
                 _.$prevArrow.removeClass('slick-hidden').removeAttr('aria-hidden tabindex');
                 _.$nextArrow.removeClass('slick-hidden').removeAttr('aria-hidden tabindex');
 
-                if (_.htmlExpr.test(_.options.prevArrow)) {
+                if (_.htmlExpr.test(_.options.prevArrow())) {
                     _.$prevArrow.appendTo(_.$slideControls).wrapAll('<li></li>');
                 }
 
-                if (_.htmlExpr.test(_.options.nextArrow)) {
+                if (_.htmlExpr.test(_.options.nextArrow())) {
                     _.$nextArrow.appendTo(_.$slideControls).wrapAll('<li></li>');
                 }
 
@@ -497,7 +503,7 @@
 
         if (_.options.accessibility && _.options.autoplay) {
 
-            _.$pauseButton = $(_.options.pauseButton).addClass('slick-pause slick-control slick--playing').attr('data-action', 'pause');
+            _.$pauseButton = $(_.options.pauseButton()).addClass('slick-pause slick-control slick--playing').attr('data-action', 'pause');
 
             _.$pauseButton.find('.slick-pause-label').text(_.options.pauseLabel);
 
@@ -927,7 +933,7 @@
                 .removeAttr('aria-hidden aria-disabled tabindex')
                 .css('display','');
 
-            if ( _.htmlExpr.test( _.options.prevArrow )) {
+            if ( _.htmlExpr.test( _.options.prevArrow() )) {
                 _.$slideControls.remove();
                 _.$prevArrow.remove();
             }
@@ -940,7 +946,7 @@
                 .removeAttr('aria-hidden aria-disabled tabindex')
                 .css('display','');
 
-            if ( _.htmlExpr.test( _.options.nextArrow )) {
+            if ( _.htmlExpr.test( _.options.nextArrow() )) {
                 _.$slideControls.remove();
                 _.$nextArrow.remove();
             }
@@ -3069,7 +3075,7 @@
                 .removeAttr('aria-hidden aria-disabled tabindex')
                 .css('display','');
 
-            if ( _.htmlExpr.test( _.options.prevArrow )) {
+            if ( _.htmlExpr.test( _.options.prevArrow() )) {
                 _.$slideControls.remove();
                 _.$prevArrow.remove();
             }
@@ -3082,7 +3088,7 @@
                 .removeAttr('aria-hidden aria-disabled tabindex')
                 .css('display','');
 
-            if ( _.htmlExpr.test( _.options.nextArrow )) {
+            if ( _.htmlExpr.test( _.options.nextArrow() )) {
                 _.$slideControls.remove();
                 _.$nextArrow.remove();
             }

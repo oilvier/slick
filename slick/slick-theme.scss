@@ -119,13 +119,7 @@ $slick-opacity-not-active: 0.25 !default;
     &.slick-disabled:before {
         opacity: $slick-opacity-not-active;
     }
-    &:before {
-        font-family: $slick-font-family;
-        font-size: 20px;
-        line-height: 1;
-        color: $slick-arrow-color;
-        opacity: $slick-opacity-default;
-    }
+
     .slick-initialized:not(.slick-accessible) & {
         outline: none;
     }
@@ -133,6 +127,19 @@ $slick-opacity-not-active: 0.25 !default;
 
   .ico {
     fill: $white;
+  }
+
+  .slick-initialized:not(.slick-accessible) & {
+    font-size: 0;
+    line-height: 0;
+
+    &::before {
+      font-family: $slick-font-family;
+      font-size: 20px;
+      line-height: 1;
+      color: $slick-arrow-color;
+      opacity: $slick-opacity-default;
+    }
   }
 }
 
@@ -143,6 +150,15 @@ $slick-opacity-not-active: 0.25 !default;
     left: auto;
     right: -25px;
   }
+
+  .slick-initialized:not(.slick-accessible) & {
+    &:before {
+        content: $slick-prev-character;
+        [dir="rtl"] & {
+            content: $slick-next-character;
+        }
+    }
+  }
 }
 
 .slick-next {
@@ -151,6 +167,15 @@ $slick-opacity-not-active: 0.25 !default;
   [dir="rtl"] & {
     left: -25px;
     right: auto;
+  }
+
+  .slick-initialized:not(.slick-accessible) & {
+    &:before {
+        content: $slick-next-character;
+        [dir="rtl"] & {
+            content: $slick-prev-character;
+        }
+    }
   }
 }
 
@@ -181,7 +206,6 @@ $slick-opacity-not-active: 0.25 !default;
   }
 
   &.slick--playing {
-
     &:before,
     &:after {
       content: '';
@@ -200,6 +224,10 @@ $slick-opacity-not-active: 0.25 !default;
     &:after {
       right: 4px;
     }
+  }
+
+  .slick-pause-label {
+    @include visually-hidden;
   }
 }
 
@@ -222,6 +250,7 @@ $slick-opacity-not-active: 0.25 !default;
         bottom: -25px;
         padding: 0;
     }
+
     .slick-dot {
         @include reset-button(inline-block);
         position: relative;
@@ -231,6 +260,7 @@ $slick-opacity-not-active: 0.25 !default;
         margin: 0 5px;
         padding: 0;
         cursor: pointer;
+
         button {
             border: 0;
             background: transparent;
