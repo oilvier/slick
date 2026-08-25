@@ -6,7 +6,7 @@
 |___/_|_|\___|_|\_(_)/ |___/
                    |__/
 
- Version: 1.9.0
+ Version: 2.0.1
   Author: Ken Wheeler / Clever Age
  Website: http://kenwheeler.github.io
     Docs: http://kenwheeler.github.io/slick
@@ -19,8 +19,19 @@
     'use strict';
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
-    } else if (typeof exports !== 'undefined') {
-        module.exports = factory(require('jquery'));
+    } else if (typeof module === 'object' && module.exports) {
+        module.exports = function( root, jQuery ) {
+            if ( jQuery === undefined ) {
+                if ( typeof window !== 'undefined' ) {
+                    jQuery = require('jquery');
+                }
+                else {
+                    jQuery = require('jquery')(root);
+                }
+            }
+            factory(jQuery);
+            return jQuery;
+        };
     } else {
         factory(jQuery);
     }
@@ -52,8 +63,8 @@
                 labelNextFirst: 'Last item',
                 labelAnnouncement: 'Slide {currentItem} of {totalItems}',
                 labelPaginatioSeparator: 'of',
-                prevArrow: '<button class="slick-prev" type="button">Previous</button>',
-                nextArrow: '<button class="slick-next" type="button">Next</button>',
+                prevArrow: '<button class="slick-prev" type="button">Previous Slide</button>',
+                nextArrow: '<button class="slick-next" type="button">Next Slide</button>',
                 autoplay: false,
                 autoplaySpeed: 3000,
                 centerMode: false,
@@ -165,14 +176,6 @@
 
             _.originalSettings = _.options;
 
-            if (typeof document.mozHidden !== 'undefined') {
-                _.hidden = 'mozHidden';
-                _.visibilityChange = 'mozvisibilitychange';
-            } else if (typeof document.webkitHidden !== 'undefined') {
-                _.hidden = 'webkitHidden';
-                _.visibilityChange = 'webkitvisibilitychange';
-            }
-
             _.autoPlay = $.proxy(_.autoPlay, _);
             _.autoPlayClear = $.proxy(_.autoPlayClear, _);
             _.autoPlayIterator = $.proxy(_.autoPlayIterator, _);
@@ -205,7 +208,8 @@
         var _ = this;
 
         _.$slideTrack.find('.slick-active').attr({
-            'aria-hidden': 'false'
+            'aria-hidden': 'false',
+             'tabindex': '0'
         }).find('a, input, button, select').attr({
             'tabindex': '0'
         });
@@ -304,12 +308,10 @@
                     step: function(now) {
                         now = Math.ceil(now);
                         if (_.options.vertical === false) {
-                            animProps[_.animType] = 'translate(' +
-                                now + 'px, 0px)';
+                            animProps[_.animType] = 'translate(' + now + 'px, 0)';
                             _.$slideTrack.css(animProps);
                         } else {
-                            animProps[_.animType] = 'translate(0px,' +
-                                now + 'px)';
+                            animProps[_.animType] = 'translate(0, ' + now + 'px)';
                             _.$slideTrack.css(animProps);
                         }
                     },
@@ -326,9 +328,9 @@
                 targetLeft = Math.ceil(targetLeft);
 
                 if (_.options.vertical === false) {
-                    animProps[_.animType] = 'translate3d(' + targetLeft + 'px, 0px, 0px)';
+                    animProps[_.animType] = 'translate3d(' + targetLeft + 'px, 0, 0)';
                 } else {
-                    animProps[_.animType] = 'translate3d(0px,' + targetLeft + 'px, 0px)';
+                    animProps[_.animType] = 'translate3d(0, ' + targetLeft + 'px, 0)';
                 }
                 _.$slideTrack.css(animProps);
 
@@ -565,12 +567,16 @@
 
         _.$slider.addClass('slick-slider');
 
+        if (_.options.rtl === true) {
+            _.$slider.attr('dir', 'rtl');
+        }
+
         _.$slideTrack = (_.slideCount === 0) ?
-            $('<div class="slick-track"/>').appendTo(_.$slider) :
-            _.$slides.wrapAll('<div class="slick-track"/>').parent();
+            $('<div class="slick-track"></div>').appendTo(_.$slider) :
+            _.$slides.wrapAll('<div class="slick-track"></div>').parent();
 
         _.$list = _.$slideTrack.wrap(
-            '<div class="slick-list"/>').parent();
+            '<div class="slick-list"></div>').parent();
         _.$slideTrack.css('opacity', 0);
 
         if (_.options.centerMode === true || _.options.swipeToSlide === true) {
@@ -764,8 +770,7 @@
             case 'index':
                 var index = event.data.index === 0 ? 0 :
                     event.data.index || $target.index() * _.options.slidesToScroll;
-
-                _.slideHandler(_.checkNavigable(index), false, dontAnimate, forceFocus);
+                _.slideHandler(_.checkNavigable(index), false, dontAnimate, forceFocus, announce);
                 if (!_.options.accessibility) {
                     $target.children().trigger('focus');
                 } else if (!_.paused) {
@@ -1172,13 +1177,13 @@
         if (_.options.infinite === true) {
             if (_.slideCount > _.options.slidesToShow) {
                 _.slideOffset = (_.slideWidth * _.options.slidesToShow) * -1;
-                coef = -1
+                coef = -1;
 
                 if (_.options.vertical === true && _.options.centerMode === true) {
                     if (_.options.slidesToShow === 2) {
                         coef = -1.5;
                     } else if (_.options.slidesToShow === 1) {
-                        coef = -2
+                        coef = -2;
                     }
                 }
                 verticalOffset = (verticalHeight * _.options.slidesToShow) * coef;
@@ -1358,6 +1363,7 @@
         _.changeSlide({
             data: {
                 message: 'index',
+                announce: true,
                 index: parseInt(slide)
             }
         }, dontAnimate);
@@ -1427,7 +1433,7 @@
                 });
 
                 if (slideControlIndex !== -1) {
-                   var ariaButtonControl = 'slick-slide-control' + _.instanceUid + slideControlIndex
+                   var ariaButtonControl = 'slick-slide-control' + _.instanceUid + slideControlIndex;
                    if ($('#' + ariaButtonControl).length) {
                      $(this).attr({
                          'aria-describedby': ariaButtonControl
@@ -1440,15 +1446,18 @@
                 var mappedSlideIndex = tabControlIndexes[i];
                 var $buttonContent = $('<span />', { 'class': 'slick-dot-content', 'html': ++i })
                     .append($('<span />', { 'class': 'slick-dot-count', 'html': ' '+ _.options.labelPaginatioSeparator +' ' + numDotGroups }));
-                var $thisTrigger = $(this).find(':first-child');
                 var $thisButton = $(this).find('button');
                 $thisButton.first().attr({
                     'id': 'slick-slide-control' + _.instanceUid + i,
                     'aria-controls': 'slick-slide' + _.instanceUid + mappedSlideIndex,
+                    'aria-expanded': false
                 });
-                if (!$thisTrigger.find('.slick-dot-content').length) {
-                    $thisTrigger.append($buttonContent);
+                if (!$thisButton.find('.slick-dot-content').length) {
+                    $thisButton.append($buttonContent);
                 }
+            }).eq(_.currentSlide).find('button').attr({
+                'aria-expanded': 'true',
+                'tabindex': '0'
             }).end();
         }
 
@@ -1519,7 +1528,8 @@
 
         if (_.options.dots === true && _.slideCount > _.options.slidesToShow) {
             $('li button', _.$dots).on('click.slick', {
-                message: 'index'
+                message: 'index',
+                announce: true
             }, _.changeSlide);
 
             if (_.options.accessibility === true) {
@@ -1623,13 +1633,15 @@
             if (event.keyCode === 37 && _.options.accessibility === true) {
                 _.changeSlide({
                     data: {
-                        message: _.options.rtl === true ? 'next' :  'previous'
+                        message: _.options.rtl === true ? 'next' :  'previous',
+                        announce: true
                     }
                 });
             } else if (event.keyCode === 39 && _.options.accessibility === true) {
                 _.changeSlide({
                     data: {
-                        message: _.options.rtl === true ? 'previous' : 'next'
+                        message: _.options.rtl === true ? 'previous' : 'next',
+                        announce: true
                     }
                 });
             }
@@ -1752,7 +1764,7 @@
         _.setPosition();
 
         _.$slideTrack.css({
-            opacity: 1
+            opacity: '1'
         });
 
         _.$slider.removeClass('slick-loading');
@@ -1771,7 +1783,8 @@
 
         _.changeSlide({
             data: {
-                message: 'next'
+                message: 'next',
+                announce: true
             }
         });
 
@@ -1846,7 +1859,7 @@
 
                 if (_.options.focusOnChange || forceFocus) {
                     var $currentSlide = $(_.$slides.get(_.currentSlide));
-                    $currentSlide.attr('tabindex', 0).focus();
+                    $currentSlide.attr('tabindex', 0).trigger('focus');
                 }
                 if (announce) {
                     var announceItem = _.options.labelAnnouncement.replace("{currentItem}", ++index).replace("{totalItems}", _.slideCount);
@@ -1864,7 +1877,8 @@
 
         _.changeSlide({
             data: {
-                message: 'previous'
+                message: 'previous',
+                announce: true
             }
         });
 
@@ -1991,7 +2005,8 @@
             _.changeSlide({
                 data: {
                     message: 'index',
-                    index: currentSlide
+                    index: currentSlide,
+                    announce: true
                 }
             }, false);
 
@@ -2004,7 +2019,7 @@
         var _ = this, breakpoint, currentBreakpoint, l,
             responsiveSettings = _.options.responsive || null;
 
-        if ( $.type(responsiveSettings) === 'array' && responsiveSettings.length ) {
+        if ( Array.isArray(responsiveSettings) && responsiveSettings.length ) {
 
             _.respondTo = _.options.respondTo || 'window';
 
@@ -2152,8 +2167,8 @@
         if (_.options.rtl === true) {
             position = -position;
         }
-        x = _.positionProp == 'left' ? Math.ceil(position) + 'px' : '0px';
-        y = _.positionProp == 'top' ? Math.ceil(position) + 'px' : '0px';
+        x = _.positionProp == 'left' ? Math.ceil(position) + 'px' : '0';
+        y = _.positionProp == 'top' ? Math.ceil(position) + 'px' : '0';
 
         positionProps[_.positionProp] = position;
 
@@ -2165,7 +2180,7 @@
                 positionProps[_.animType] = 'translate(' + x + ', ' + y + ')';
                 _.$slideTrack.css(positionProps);
             } else {
-                positionProps[_.animType] = 'translate3d(' + x + ', ' + y + ', 0px)';
+                positionProps[_.animType] = 'translate3d(' + x + ', ' + y + ', 0)';
                 _.$slideTrack.css(positionProps);
             }
         }
@@ -2222,24 +2237,24 @@
                 $(element).css({
                     position: 'relative',
                     right: targetLeft,
-                    top: 0,
+                    top: '0',
                     zIndex: _.options.zIndex - 2,
-                    opacity: 0
+                    opacity: '0'
                 });
             } else {
                 $(element).css({
                     position: 'relative',
                     left: targetLeft,
-                    top: 0,
+                    top: '0',
                     zIndex: _.options.zIndex - 2,
-                    opacity: 0
+                    opacity: '0'
                 });
             }
         });
 
         _.$slides.eq(_.currentSlide).css({
             zIndex: _.options.zIndex - 1,
-            opacity: 1
+            opacity: '1'
         });
 
     };
@@ -2250,7 +2265,7 @@
 
         if (_.options.slidesToShow === 1 && _.options.adaptiveHeight === true && _.options.vertical === false) {
             var targetHeight = _.$slides.eq(_.currentSlide).outerHeight(true);
-            _.$list.css('height', targetHeight);
+            _.$list.css('height', targetHeight + 'px');
         }
 
     };
@@ -2273,19 +2288,19 @@
 
         var _ = this, l, item, option, value, refresh = false, type;
 
-        if( $.type( arguments[0] ) === 'object' ) {
+        if( $.isPlainObject( arguments[0] ) ) {
 
             option =  arguments[0];
             refresh = arguments[1];
             type = 'multiple';
 
-        } else if ( $.type( arguments[0] ) === 'string' ) {
+        } else if ( typeof arguments[0] === 'string' ) {
 
             option =  arguments[0];
             value = arguments[1];
             refresh = arguments[2];
 
-            if ( arguments[0] === 'responsive' && $.type( arguments[1] ) === 'array' ) {
+            if ( arguments[0] === 'responsive' && Array.isArray( arguments[1] ) ) {
 
                 type = 'responsive';
 
@@ -2315,7 +2330,7 @@
 
             for ( item in value ) {
 
-                if( $.type( _.options.responsive ) !== 'array' ) {
+                if( !Array.isArray( _.options.responsive ) ) {
 
                     _.options.responsive = [ value[item] ];
 
@@ -2451,9 +2466,15 @@
 
         if (_.options.centerMode === true) {
 
-            var evenCoef = _.options.slidesToShow % 2 === 0 ? 1 : 0;
+            var evenCoef;
 
-            centerOffset = Math.floor(_.options.slidesToShow / 2);
+            if (_.options.slidesToShow >= _.$slides.length) {
+                evenCoef = -1;
+                centerOffset = _.options.slidesToShow = _.$slides.length;
+            } else {
+                evenCoef = _.options.slidesToShow % 2 === 0 ? 1 : 0;
+                centerOffset = Math.floor(_.options.slidesToShow / 2);
+            }
 
             if (_.options.infinite === true) {
 
@@ -2562,18 +2583,18 @@
                 for (i = _.slideCount; i > (_.slideCount -
                         infiniteCount); i -= 1) {
                     slideIndex = i - 1;
-                    $(_.$slides[slideIndex]).clone(true).attr('id', '')
+                    $(_.$slides[slideIndex]).clone(true).removeAttr('id')
                         .attr('data-slick-index', slideIndex - _.slideCount)
                         .prependTo(_.$slideTrack).addClass('slick-cloned');
                 }
                 for (i = 0; i < infiniteCount  + _.slideCount; i += 1) {
                     slideIndex = i;
-                    $(_.$slides[slideIndex]).clone(true).attr('id', '')
+                    $(_.$slides[slideIndex]).clone(true).removeAttr('id')
                         .attr('data-slick-index', slideIndex + _.slideCount)
                         .appendTo(_.$slideTrack).addClass('slick-cloned');
                 }
                 _.$slideTrack.find('.slick-cloned').find('[id]').each(function() {
-                    $(this).attr('id', '');
+                    $(this).removeAttr('id');
                 });
 
             }

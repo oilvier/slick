@@ -5,33 +5,50 @@ slick
 
 _the last carousel you'll ever need_
 
+#### Version 2.0
+
+Version 2.0 is compatible with jQuery 4.
+
 #### Demo
 
 [http://kenwheeler.github.io/slick](http://kenwheeler.github.io/slick/)
 
 #### CDN
 
-To start working with Slick right away, there's a couple of CDN choices availabile
+To start working with Slick right away, there's a couple of CDN choices available
 to serve the files as close, and fast as possible to your users:
 
 - https://cdnjs.com/libraries/slick-carousel
-- https://www.jsdelivr.com/projects/jquery.slick
+- [https://cdn.jsdelivr.net/gh/kenwheeler/slick/](https://cdn.jsdelivr.net/gh/kenwheeler/slick/)
 
-##### Example using jsDelivr
+##### Example using from jsDelivr
 
-Just add a link to the css file in your `<head>`:
+Just add a link to the css file in your `<head>`. If you are using jQuery 4.0 or higher, use the following:
 
 ```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@master/slick/slick.css"/>
 <!-- Add the slick-theme.css if you want default styling -->
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.9.0/slick/slick.css"/>
-<!-- Add the slick-theme.css if you want default styling -->
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.9.0/slick/slick-theme.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@master/slick/slick-theme.css"/>
 ```
 
 Then, before your closing ```<body>``` tag add:
 
 ```html
-<script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.9.0/slick/slick.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/kenwheeler/slick@master/slick/slick.min.js"></script>
+```
+
+If you are using jQuery 3.0 or lower, use the following:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
+<!-- Add the slick-theme.css if you want default styling -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
+```
+
+Then, before your closing ```<body>``` tag add:
+
+```html
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
 ```
 
 #### Package Managers
@@ -43,6 +60,9 @@ bower install --save slick-carousel
 # NPM
 npm install slick-carousel
 ```
+
+> [!NOTE]
+> Version 2.0.0 of Slick is currently not available via Bower or NPM. Please use the CDN links above to get the latest version.
 
 #### Contributing
 

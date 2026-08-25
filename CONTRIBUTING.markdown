@@ -3,7 +3,7 @@
 ### Test case required
 
 **All bug reports and problem issues require a jsFiddle**.   
-[Please fork this JSFiddle as a baseline](http://jsfiddle.net/simeydotme/fmo50w7n/).
+[Please fork this JSFiddle as a baseline](https://jsfiddle.net/o1yehw0g/1/)
 
 + A test case clearly demonstrates the bug or issue.
 + It contains the bare minimum HTML, CSS, and JavaScript required to demonstrate the bug.
@@ -17,7 +17,6 @@ You must provide a clear and simple way to reproduce the issue with the provided
 
 Although Slick is designed to be super easy to use, there's always things that can go wrong, especially when interacting with other plugins and complicated websites. If you are **having problems getting Slick to work**, or can't figure something out, **this repository**'s issues section **is not the place to ask about it**.  
 
-I have set up a subreddit for Slick discussion at [reddit.com/r/slickcarousel](http://www.reddit.com/r/slickcarousel/).  
 And a gitter chatroom here: [gitter.im/kenwheeler/slick](https://gitter.im/kenwheeler/slick).  
 And finally you can ask the world for help, and find out if anyone else has your problem at [stackoverflow](http://stackoverflow.com/search?q=slick+carousel).
 
@@ -27,6 +26,31 @@ Please use these forums as an area to discuss Slick and any issues you may have.
 
 If you would like to request or propose a feature, please do so in the the Slick subreddit or gitter chat:  
 [reddit.com/r/slickcarousel](http://www.reddit.com/r/slickcarousel/) / [gitter.im/kenwheeler/slick](https://gitter.im/kenwheeler/slick).
+
+## Building
+
+If your change touches `slick/slick.js` or the SCSS files, please rebuild the
+generated assets so they stay in sync with the source.
+
+### Minifying the JavaScript
+
+`slick/slick.min.js` is produced from `slick/slick.js` with [esbuild](https://esbuild.github.io/):
+
+```sh
+npx esbuild slick/slick.js --minify --outfile=slick/slick.min.js
+```
+
+`npx` will fetch esbuild on demand, so there's nothing to install first.
+
+### Compiling the SCSS
+
+The stylesheets are compiled from `slick/slick.scss` and `slick/slick-theme.scss`
+with [Dart Sass](https://sass-lang.com/dart-sass). Compile without source maps:
+
+```sh
+sass slick/slick.scss slick/slick.css --no-source-map
+sass slick/slick-theme.scss slick/slick-theme.css --no-source-map
+```
 
 ## Pull requests
 
