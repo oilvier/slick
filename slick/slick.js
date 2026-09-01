@@ -63,12 +63,6 @@
                 labelNextFirst: 'Last item',
                 labelAnnouncement: 'Slide {currentItem} of {totalItems}',
                 labelPaginatioSeparator: 'of',
-                prevArrow() {
-                    return '<button class="slick-prev" type="button">' + this.labelPrev + '</button>';
-                },
-                nextArrow() {
-                    return '<button class="slick-next" type="button">' + this.labelNext + '</button>';
-                },
                 autoplay: false,
                 autoplaySpeed: 3000,
                 centerMode: false,
@@ -90,14 +84,14 @@
                 initialSlide: 0,
                 lazyLoad: 'ondemand',
                 mobileFirst: false,
+                nextArrow: (options) => `<button class="slick-next" type="button"><span class="slick-visually-hidden">${options.labelNext}</span></button>`,
                 pauseOnHover: false,
                 pauseOnFocus: false,
                 pauseOnDotsHover: true,
                 pauseLabel: 'Stop animation',
                 playLabel: 'Start animation',
-                pauseButton() {
-                    return '<button class="slick-pause" type="button"><span class="slick-pause-label">' + this.pauseLabel + '</span></button>';
-                },
+                pauseButton: (options) => `<button class="slick-pause" type="button"><span class="slick-pause-label">${options.pauseLabel}</span></button>`,
+                prevArrow: (options) => `<button class="slick-prev" type="button"><span class="slick-visually-hidden">${options.labelPrev}</span></button>`,
                 respondTo: 'window',
                 responsive: null,
                 rows: 1,
@@ -455,19 +449,20 @@
     Slick.prototype.buildArrows = function() {
 
         var _ = this;
-            _.$slideControls = $('<div />', { 'class': 'slick-controls'});
+            _.$slideControls = $('<div />', { 'class': 'slick-controls'}),
+            _.isGeneratedHtml = (opt) => typeof opt === 'function' || (typeof opt === 'string' && _.htmlExpr.test(opt));
 
         if (_.options.arrows === true ) {
 
-            _.$prevArrow = $(_.options.prevArrow()).addClass('slick-arrow slick-control');
-            _.$nextArrow = $(_.options.nextArrow()).addClass('slick-arrow slick-control');
+            _.$prevArrow = Slick.prototype.parseOption(_.options.prevArrow, _.options).addClass('slick-arrow slick-control');
+            _.$nextArrow = Slick.prototype.parseOption(_.options.nextArrow, _.options).addClass('slick-arrow slick-control');
 
             if( _.slideCount > _.options.slidesToShow ) {
 
                 _.$prevArrow.removeClass('slick-hidden').removeAttr('aria-hidden tabindex');
                 _.$nextArrow.removeClass('slick-hidden').removeAttr('aria-hidden tabindex');
 
-                if (_.htmlExpr.test(_.options.prevArrow())) {
+                if (_.isGeneratedHtml(_.options.prevArrow)) {
                     if (_.options.groupControls === true) {
                         _.$prevArrow.appendTo(_.$slideControls);
                     } else {
@@ -475,7 +470,7 @@
                     }
                 }
 
-                if (_.htmlExpr.test(_.options.nextArrow())) {
+                if (_.isGeneratedHtml(_.options.nextArrow)) {
                     if (_.options.groupControls === true) {
                         _.$nextArrow.appendTo(_.$slideControls);
                     } else {
@@ -507,7 +502,7 @@
 
         if (_.options.accessibility && _.options.autoplay) {
 
-            _.$pauseButton = $(_.options.pauseButton()).addClass('slick-pause slick-control slick--playing').attr('data-action', 'pause');
+            _.$pauseButton = Slick.prototype.parseOption(_.options.pauseButton, _.options).addClass('slick-pause slick-control slick--playing').attr('data-action', 'pause');
 
             _.$pauseButton.find('.slick-pause-label').text(_.options.pauseLabel);
 
@@ -3227,6 +3222,13 @@
 
         }
 
+    };
+
+    Slick.prototype.parseOption = function(option, options) {
+        if (typeof option === 'function') {
+            return $(option(options));
+        }
+        return $(option);
     };
 
     $.fn.slick = function() {
