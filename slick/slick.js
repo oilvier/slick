@@ -85,6 +85,7 @@
                 fade: false,
                 focusOnSelect: false,
                 focusOnChange: false,
+                groupControls: false,
                 infinite: true,
                 initialSlide: 0,
                 lazyLoad: 'ondemand',
@@ -454,7 +455,7 @@
     Slick.prototype.buildArrows = function() {
 
         var _ = this;
-        _.$slideControls = $('<ul />', { 'class': 'slick-controls'});
+            _.$slideControls = $('<div />', { 'class': 'slick-controls'});
 
         if (_.options.arrows === true ) {
 
@@ -467,11 +468,19 @@
                 _.$nextArrow.removeClass('slick-hidden').removeAttr('aria-hidden tabindex');
 
                 if (_.htmlExpr.test(_.options.prevArrow())) {
-                    _.$prevArrow.appendTo(_.$slideControls).wrapAll('<li></li>');
+                    if (_.options.groupControls === true) {
+                        _.$prevArrow.appendTo(_.$slideControls);
+                    } else {
+                        _.$prevArrow.prependTo(_.options.appendArrows);
+                    }
                 }
 
                 if (_.htmlExpr.test(_.options.nextArrow())) {
-                    _.$nextArrow.appendTo(_.$slideControls).wrapAll('<li></li>');
+                    if (_.options.groupControls === true) {
+                        _.$nextArrow.appendTo(_.$slideControls);
+                    } else {
+                        _.$nextArrow.prependTo(_.options.appendArrows);
+                    }
                 }
 
                 if (_.options.infinite !== true) {
@@ -508,7 +517,7 @@
 
         }
 
-        if (_.$slideControls.find('li').length) {
+        if (_.options.groupControls === true) {
             _.$slideControls.appendTo(_.options.appendArrows);
         }
 
@@ -930,7 +939,9 @@
                 .css('display','');
 
             if ( _.htmlExpr.test( _.options.prevArrow() )) {
-                _.$slideControls.remove();
+                if (_.options.groupControls === true) {
+                    _.$slideControls.remove();
+                }
                 _.$prevArrow.remove();
             }
         }
@@ -943,7 +954,9 @@
                 .css('display','');
 
             if ( _.htmlExpr.test( _.options.nextArrow() )) {
-                _.$slideControls.remove();
+                if (_.options.groupControls === true) {
+                    _.$slideControls.remove();
+                }
                 _.$nextArrow.remove();
             }
         }
@@ -3067,7 +3080,9 @@
                 .css('display','');
 
             if ( _.htmlExpr.test( _.options.prevArrow() )) {
-                _.$slideControls.remove();
+                if (_.options.groupControls === true) {
+                    _.$slideControls.remove();
+                }
                 _.$prevArrow.remove();
             }
         }
@@ -3080,7 +3095,9 @@
                 .css('display','');
 
             if ( _.htmlExpr.test( _.options.nextArrow() )) {
-                _.$slideControls.remove();
+                if (_.options.groupControls === true) {
+                    _.$slideControls.remove();
+                }
                 _.$nextArrow.remove();
             }
         }

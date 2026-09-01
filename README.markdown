@@ -109,6 +109,7 @@ edgeFriction | integer | 0.15 | Resistance when swiping edges of non-infinite ca
 fade | boolean | false | Enables fade
 focusOnSelect | boolean | false | Enable focus on selected element (click)
 focusOnChange | boolean | false | Puts focus on slide after change
+groupControls | boolean | false | Merge arrows in the same element (for easier styling)
 infinite | boolean | true | Infinite looping
 initialSlide | integer | 0 | Slide to start on
 lazyLoad | string | 'ondemand' | Accepts 'ondemand' or 'progressive' for lazy load technique. 'ondemand' will load the image as soon as you slide to it, 'progressive' loads one image after the other when the page loads.
