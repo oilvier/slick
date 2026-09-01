@@ -474,7 +474,7 @@
                     if (_.options.groupControls === true) {
                         _.$nextArrow.appendTo(_.$slideControls);
                     } else {
-                        _.$nextArrow.prependTo(_.options.appendArrows);
+                        _.$nextArrow.insertAfter(_.$prevArrow);
                     }
                 }
 
