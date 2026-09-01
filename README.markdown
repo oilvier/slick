@@ -112,13 +112,24 @@ focusOnChange | boolean | false | Puts focus on slide after change
 groupControls | boolean | false | Merge arrows in the same element (for easier styling)
 infinite | boolean | true | Infinite looping
 initialSlide | integer | 0 | Slide to start on
+labelPrev | string | 'Previous item' | Text label for the previous arrow
+labelNext | string | 'Next item' | Text label for the next arrow
+labelPrevFirst | string | 'Inactive button, you are on the first item' | Text label for the previous arrow when on the first item
+labelNextLast | string | 'Inactive button, you are on the last item' | Text label for the next arrow when on the last item
+labelPrevInfinite | string | 'Previous (go to the last item)' | Text label for the previous arrow in infinite mode (begining of the loop)
+labelNextInfinite | string | 'Next (go to the first item)' | Text label for the next arrow in infinite mode (end of the loop)
+labelAnnouncement | string | 'Item {currentItem} of {totalItems}' | Text label for the ARIA live region
+labelPaginatioSeparator | string | 'of' | Text label for the separator term in the pagination (e.g.: Item X of Y)
 lazyLoad | string | 'ondemand' | Accepts 'ondemand' or 'progressive' for lazy load technique. 'ondemand' will load the image as soon as you slide to it, 'progressive' loads one image after the other when the page loads.
 mobileFirst | boolean | false | Responsive settings use mobile first calculation
-nextArrow | string (html \| jQuery selector) \| object (DOM node \| jQuery object) | `<button type="button" class="slick-next">Next</button>` | Allows you to select a node or customize the HTML for the "Next" arrow.
+nextArrow | string (html | jQuery selector) | object (DOM node | jQuery object) | `<button class="slick-next" type="button"><span class="slick-visually-hidden">${options.labelNext}</span></button>` | Customize the HTML for the "Next" arrow.
 pauseOnDotsHover | boolean | false | Pauses autoplay when a dot is hovered
-pauseOnFocus | boolean | true | Pauses autoplay when slider is focussed
+pauseOnFocus | boolean | false | Pauses autoplay when slider is focussed
 pauseOnHover | boolean | true | Pauses autoplay on hover
-prevArrow | string (html \| jQuery selector) \| object (DOM node \| jQuery object) | `<button type="button" class="slick-prev">Previous</button>` | Allows you to select a node or customize the HTML for the "Previous" arrow.
+pauseLabel | string | 'Stop animation' | Text label for the pause button
+playLabel | string | 'Start animation' | Test label for the play button
+pauseButton | string (html | jQuery selector) | object (DOM node | jQuery object) | `<button class="slick-pause" type="button"><span class="slick-pause-label">${options.pauseLabel}</span></button>` | Customize the HTML for the Play/Pause button.
+prevArrow | string (html | jQuery selector) | object (DOM node | jQuery object) | `<button class="slick-prev" type="button"><span class="slick-visually-hidden">${options.labelPrev}</span></button>` | Customize the HTML for the "Prev" arrow.
 respondTo | string | 'window' | Width that responsive object responds to. Can be 'window', 'slider' or 'min' (the smaller of the two).
 responsive | array | null | Array of objects [containing breakpoints and settings objects (see example)](#responsive-option-example). Enables settings at given `breakpoint`. Set `settings` to "unslick" instead of an object to disable slick at a given breakpoint.
 rows | int | 1 | Setting this to more than 1 initializes grid mode. Use slidesPerRow to set how many slides should be in each row.

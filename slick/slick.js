@@ -55,14 +55,6 @@
                 appendDots: $(element),
                 arrows: true,
                 asNavFor: null,
-                labelPrev: 'Previous item',
-                labelNext: 'Next item',
-                labelPrevInfinite: 'Previous (go to the last item)',
-                labelNextInfinite: 'Next (go to the first item)',
-                labelPrevFirst: 'First item',
-                labelNextFirst: 'Last item',
-                labelAnnouncement: 'Slide {currentItem} of {totalItems}',
-                labelPaginatioSeparator: 'of',
                 autoplay: false,
                 autoplaySpeed: 3000,
                 centerMode: false,
@@ -82,6 +74,14 @@
                 groupControls: false,
                 infinite: true,
                 initialSlide: 0,
+                labelPrev: 'Previous item',
+                labelNext: 'Next item',
+                labelPrevInfinite: 'Previous (go to the last item)',
+                labelNextInfinite: 'Next (go to the first item)',
+                labelPrevFirst: 'Inactive button, you are on the first item',
+                labelNextLast: 'Inactive button, you are on the last item',
+                labelAnnouncement: 'Item {currentItem} of {totalItems}',
+                labelPaginatioSeparator: 'of',
                 lazyLoad: 'ondemand',
                 mobileFirst: false,
                 nextArrow: (options) => `<button class="slick-next" type="button"><span class="slick-visually-hidden">${options.labelNext}</span></button>`,
@@ -3158,8 +3158,8 @@
             }
 
             if (_.currentSlide >= _.slideCount - _.options.slidesToShow) {
-                _.$nextArrow.find('.slick-visually-hidden').text(_.options.labelNextFirst);
-            } else if (_.$nextArrow.find('.slick-visually-hidden').text() === _.options.labelNextFirst) {
+                _.$nextArrow.find('.slick-visually-hidden').text(_.options.labelNextLast);
+            } else if (_.$nextArrow.find('.slick-visually-hidden').text() === _.options.labelNextLast) {
                _.$nextArrow.find('.slick-visually-hidden').text(_.options.labelNext);
             }
 

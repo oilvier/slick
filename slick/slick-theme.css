@@ -55,10 +55,19 @@
   color: #fff;
   border-radius: 50%;
   border: 2px solid transparent;
+  font-size: 0;
+  line-height: 0;
   -webkit-transform: translate(0, -50%);
   -ms-transform: translate(0, -50%);
   transform: translate(0, -50%);
   transition: all ease-in-out 0.3s;
+}
+.slick-arrow::before {
+  font-family: "slick";
+  font-size: 20px;
+  line-height: 1;
+  color: white;
+  opacity: 1;
 }
 .slick-arrow:hover, .slick-arrow:focus {
   background: #fff;
@@ -76,17 +85,6 @@
 .slick-arrow .ico {
   fill: #fff;
 }
-.slick-initialized:not(.slick-accessible) .slick-arrow {
-  font-size: 0;
-  line-height: 0;
-}
-.slick-initialized:not(.slick-accessible) .slick-arrow::before {
-  font-family: "slick";
-  font-size: 20px;
-  line-height: 1;
-  color: white;
-  opacity: 1;
-}
 
 .slick-prev {
   left: -25px;
@@ -95,10 +93,10 @@
   left: auto;
   right: -25px;
 }
-.slick-initialized:not(.slick-accessible) .slick-prev:before {
+.slick-prev:before {
   content: "←";
 }
-[dir=rtl] .slick-initialized:not(.slick-accessible) .slick-prev:before {
+[dir=rtl] .slick-prev:before {
   content: "→";
 }
 
@@ -109,10 +107,10 @@
   left: -25px;
   right: auto;
 }
-.slick-initialized:not(.slick-accessible) .slick-next:before {
+.slick-next:before {
   content: "→";
 }
-[dir=rtl] .slick-initialized:not(.slick-accessible) .slick-next:before {
+[dir=rtl] .slick-next:before {
   content: "←";
 }
 
