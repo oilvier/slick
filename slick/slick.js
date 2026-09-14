@@ -6,7 +6,7 @@
 |___/_|_|\___|_|\_(_)/ |___/
                    |__/
 
- Version: 2.0.2
+ Version: 2.0.3
   Author: Ken Wheeler / Clever Age
  Website: http://kenwheeler.github.io
     Docs: http://kenwheeler.github.io/slick
@@ -1864,7 +1864,9 @@
 
                 if (_.options.focusOnChange || forceFocus) {
                     var $currentSlide = $(_.$slides.get(_.currentSlide));
-                    $currentSlide.attr('tabindex', '-1').trigger('focus');
+                    $currentSlide.attr('tabindex', '-1');
+                    // We use native HTMLElement API to focus on our element instead of jQuery's (hence the `.get(0)`, thus we can use the `preventScroll` and `focusVisible` parameters
+                    $currentSlide.get(0).focus({ preventScroll: true, focusVisible: false });
                 }
                 if (announce) {
                     var announceItem = _.options.labelAnnouncement.replace("{currentItem}", ++index).replace("{totalItems}", _.slideCount);
